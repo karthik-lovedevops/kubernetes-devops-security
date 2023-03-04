@@ -46,7 +46,7 @@ pipeline {
       stage('Vulnerability Scan - Docker ') {
       steps {
         parallel(
-        "Dependency Scan" : { sh "Hello I am a dummy scan" },
+        "Dependency Scan" : { echo "Hello I am a dummy scan" },
         "Trivy Scan" : { sh "bash trivy-docker-image-scan.sh" }
         )
        }
