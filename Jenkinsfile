@@ -43,16 +43,19 @@ pipeline {
             }
         }
 
-    //   stage('Vulnerability Scan - Docker ') {
-    //   steps {
-    //     sh "mvn dependency-check:check"
-    //   }
-    //   post {
-    //     always {
-    //       dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-    //     }
-    //   }
-    // }
+      stage('Vulnerability Scan - Docker ') {
+      steps {
+        parallel(
+        "Dependency Scan" : { sh "Hello I am a dummy scan" },
+        "Trivy Scan" : { sh "bash trivy-docker-image-scan.sh" }
+        )
+       }
+      post {
+        always {
+          dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+        }
+      }
+    }
       stage('Docker build and push') {
       steps {
         withDockerRegistry([credentialsId: "docker-hub", url: ""]){
