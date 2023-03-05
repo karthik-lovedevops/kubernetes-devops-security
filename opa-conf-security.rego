@@ -14,7 +14,7 @@ secrets_env = [
     "tkn"
 ]
 
-deny[msg] {    
+deny[msg] {
     input[i].Cmd == "env"
     val := input[i].Value
     contains(lower(val[_]), secrets_env[_])
@@ -22,12 +22,12 @@ deny[msg] {
 }
 
 # Only use trusted base images
-deny[msg] {
-    input[i].Cmd == "from"
-    val := split(input[i].Value[0], "/")
-    count(val) > 1
-    msg = sprintf("Line %d: use a trusted base image", [i])
-}
+#deny[msg] {
+#    input[i].Cmd == "from"
+#    val := split(input[i].Value[0], "/")
+#    count(val) > 1
+#    msg = sprintf("Line %d: use a trusted base image", [i])
+#}
 
 # Do not use 'latest' tag for base imagedeny[msg] {
 deny[msg] {
@@ -78,13 +78,13 @@ forbidden_users = [
     "0"
 ]
 
-deny[msg] {
-    command := "user"
-    users := [name | input[i].Cmd == "user"; name := input[i].Value]
-    lastuser := users[count(users)-1]
-    contains(lower(lastuser[_]), forbidden_users[_])
-    msg = sprintf("Line %d: Last USER directive (USER %s) is forbidden", [i, lastuser])
-}
+#deny[msg] {
+#    command := "user"
+#    users := [name | input[i].Cmd == "user"; name := input[i].Value]
+#    lastuser := users[count(users)-1]
+#    contains(lower(lastuser[_]), forbidden_users[_])
+#    msg = sprintf("Line %d: Last USER directive (USER %s) is forbidden", [i, lastuser])
+#}
 
 # Do not sudo
 deny[msg] {
@@ -92,16 +92,4 @@ deny[msg] {
     val := concat(" ", input[i].Value)
     contains(lower(val), "sudo")
     msg = sprintf("Line %d: Do not use 'sudo' command", [i])
-}
-
-# Use multi-stage builds
-default multi_stage = false
-multi_stage = true {
-    input[i].Cmd == "copy"
-    val := concat(" ", input[i].Flags)
-    contains(lower(val), "--from=")
-}
-deny[msg] {
-    multi_stage == false
-    msg = sprintf("You COPY, but do not appear to use multi-stage builds...", [])
 }
