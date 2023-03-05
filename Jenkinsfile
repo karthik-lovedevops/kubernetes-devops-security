@@ -48,6 +48,7 @@ pipeline {
         parallel(
         "Dependency Scan" : { echo "Hello I am a dummy scan" },
         "Trivy Scan" : { sh "bash trivy-docker-image-scan.sh" }
+        "Opa conftest" : { sh "docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-conf-security.rego Dockerfile"}
         )
        }
       post {
