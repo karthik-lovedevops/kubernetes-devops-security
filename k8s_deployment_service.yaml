@@ -19,6 +19,9 @@ spec:
       containers:
       - image: replace
         name: devsecops-container
+        volumeMounts:
+        - mountPath: /tmp
+          name: test-volume
         securityContext:
           runAsNonRoot: true
           runAsUser: 100
@@ -30,6 +33,11 @@ spec:
           limits:
             memory: "800Mi"
             cpu: "800m"
+      volumes:
+      - name: test-volume
+        emptyDir: {}
+
+       
 ---
 apiVersion: v1
 kind: Service
