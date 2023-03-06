@@ -25,11 +25,11 @@ spec:
           readOnlyRootFilesystem: true
         resources:
           requests:
-            memory: "64Mi"
-            cpu: "250m"
+            memory: "600Mi"
+            cpu: "600m"
           limits:
-            memory: "128Mi"
-            cpu: "500m"
+            memory: "800Mi"
+            cpu: "800m"
 ---
 apiVersion: v1
 kind: Service
